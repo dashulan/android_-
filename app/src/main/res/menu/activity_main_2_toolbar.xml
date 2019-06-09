@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:icon="@drawable/search"
+        android:id="@+id/alarm"
+        android:title="设置闹钟"
+        app:showAsAction="never"/>
+    <item
+        android:id="@+id/quitAlarm"
+        android:title="取消闹钟"
+        app:showAsAction="never"
+        />
+
+</menu>
