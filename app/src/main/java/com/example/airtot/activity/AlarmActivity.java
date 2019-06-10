@@ -17,6 +17,7 @@ import android.widget.TimePicker;
 
 import com.example.airtot.MyApplication;
 import com.example.airtot.R;
+import com.example.airtot.dao.entity.Notes;
 
 import java.time.LocalTime;
 import java.util.Calendar;
@@ -26,12 +27,11 @@ import java.util.Random;
 public class AlarmActivity extends Activity {
     private Button quitBtn;
     private Button saveBtn;
-    private Boolean isSetting =false;
+
     private Date alarmTime;
-    public static Button calcleBtn;
-    String category;
-    String content;
+
     static AlarmManager alarmManager;
+    private Notes notes;
 
 
     @Override
@@ -43,11 +43,11 @@ public class AlarmActivity extends Activity {
         timePicker.setIs24HourView(true);
         final DatePicker datePicker = findViewById(R.id.datePicker);
 
+
+        notes = (Notes) getIntent().getSerializableExtra("notes");
+
         ((ViewGroup)((ViewGroup) datePicker.getChildAt(0)).getChildAt(0)).getChildAt(0).setVisibility(View.GONE);
 
-
-        category = getIntent().getStringExtra("category");
-        content = getIntent().getStringExtra("content");
 
         final Calendar now = Calendar.getInstance();
         quitBtn = findViewById(R.id.quit);
@@ -58,11 +58,6 @@ public class AlarmActivity extends Activity {
         quitBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent();
-                intent.putExtra("isAlarm", isSetting);
-                Long time = alarmTime==null?System.currentTimeMillis():alarmTime.getTime();
-                intent.putExtra("alarmDate",time);
-                setResult(RESULT_OK,intent);
                 finish();
             }
         });
@@ -77,32 +72,35 @@ public class AlarmActivity extends Activity {
                 int mon = datePicker.getMonth();
                 int year = now.get(Calendar.YEAR);
                 int day = datePicker.getDayOfMonth();
-                Date date = new Date();
+
                 Calendar calendar = Calendar.getInstance();
                 calendar.set(year,mon,day,hour,min);
                 alarmTime = calendar.getTime();
-                Random random = new Random(47);
-                int r = random.nextInt(1000);
+
                 int r1 = (int)(Math.random()*1000);
-
-                Intent myIntent = new Intent();
-                myIntent.putExtra("category", category);
-                myIntent.putExtra("content", content);
-                myIntent.setAction("com.example.airtot.timer");
-
-                PendingIntent sender = PendingIntent.getBroadcast(MyApplication.getContext(), r1, myIntent,0);
-                alarmManager.set(AlarmManager.RTC_WAKEUP, alarmTime.getTime(), sender);
-                isSetting =true;
-                Intent intent = new Intent();
-                intent.putExtra("isAlarm", isSetting);
-                intent.putExtra("alarmDate",alarmTime.getTime());
-                intent.putExtra("sender", sender);
-                intent.putExtra("senderid",r1);
-                setResult(RESULT_OK,intent);
+                setAlarm(r1);
                 finish();
             }
         });
 
     }
 
+    public void setAlarm(int senderId) {
+        Intent myIntent = new Intent();
+        notes.setSenderId(senderId);
+        notes.update(notes.getId());
+        myIntent.putExtra("category", notes.getCategory());
+        myIntent.putExtra("content", notes.getContent());
+        myIntent.setAction("com.example.airtot.timer");
+        PendingIntent sender = PendingIntent.getBroadcast(MyApplication.getContext(), senderId, myIntent,0);
+        alarmManager.set(AlarmManager.RTC_WAKEUP, alarmTime.getTime(), sender);
+    }
+
+    @Override
+    public void finish() {
+        Intent intent = new Intent();
+        intent.putExtra("notes", notes);
+        setResult(RESULT_OK, intent);
+        super.finish();
+    }
 }

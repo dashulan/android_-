@@ -25,6 +25,7 @@ import com.bumptech.glide.Glide;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.example.airtot.MyApplication;
 import com.example.airtot.R;
+import com.example.airtot.dao.entity.Category;
 import com.example.airtot.receiver.TimeReceiver;
 import com.example.airtot.adapter.NotesAdapter;
 import com.example.airtot.dao.entity.Notes;
@@ -92,13 +93,9 @@ public class MainActivity extends AppCompatActivity {
                 if (!categoryChanged) {
                     return;
                 }
-                List<Notes> list = LitePal.select("category").find(Notes.class);
-                Set<String> cates = new HashSet<>();
-                for (Notes notes : list) {
-                    cates.add(notes.getCategory());
-                }
-                for (String cate : cates) {
-                    navView.getMenu().add(R.id.group1, Menu.NONE, Menu.NONE, cate);
+                List<Category> categorts = LitePal.findAll(Category.class);
+                for (Category cate : categorts) {
+                    navView.getMenu().add(R.id.group1, Menu.NONE, Menu.NONE, cate.getName());
                 }
                 categoryChanged=false;
             }
@@ -208,6 +205,9 @@ public class MainActivity extends AppCompatActivity {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 String cate = editText.getText().toString();
+                                Category category = new Category();
+                                category.setName(cate);
+                                category.save();
                                 MenuItem menuItem1 = navView.getMenu().add(R.id.group1, Menu.NONE,Menu.NONE,cate);
                                 menuItem1.setCheckable(true);
                                 menuItem1.setChecked(true);
@@ -256,7 +256,6 @@ public class MainActivity extends AppCompatActivity {
                         category = menuItem.getTitle().toString();
                         menuItem.setCheckable(true);
                         menuItem.setChecked(true);
-//                mDrawerLayout.closeDrawers();
                         break;
                 }
                 return true;
