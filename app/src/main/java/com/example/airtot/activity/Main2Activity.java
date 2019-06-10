@@ -120,10 +120,11 @@ public class Main2Activity extends AppCompatActivity {
                 startActivityForResult(intent,1);
                 break;
             case R.id.quitAlarm:
-                Intent senderInent = new Intent();
-                senderInent.setAction("com.example.airtot.timer");
-                PendingIntent newPedingIntnet = PendingIntent.getBroadcast(MyApplication.getContext(), senderId, senderInent, 0);
-                AlarmActivity.alarmManager.cancel(newPedingIntnet);
+//                Intent senderInent = new Intent();
+//                senderInent.setAction("com.example.airtot.timer");
+//                PendingIntent newPedingIntnet = PendingIntent.getBroadcast(MyApplication.getContext(), senderId, senderInent, 0);
+//                AlarmActivity.alarmManager.cancel(newPedingIntnet);
+                quitAlarm(senderId);
                 break;
             case android.R.id.home:
                 finish();
@@ -167,5 +168,11 @@ public class Main2Activity extends AppCompatActivity {
         }
     }
 
+    public static void quitAlarm(int senderId) {
+        Intent senderInent = new Intent();
+        senderInent.setAction("com.example.airtot.timer");
+        PendingIntent newPedingIntnet = PendingIntent.getBroadcast(MyApplication.getContext(), senderId, senderInent, 0);
+        AlarmActivity.alarmManager.cancel(newPedingIntnet);
+    }
 
 }

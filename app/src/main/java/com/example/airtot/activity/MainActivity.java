@@ -154,6 +154,7 @@ public class MainActivity extends AppCompatActivity {
                         notes.delete();
                         adapter.remove(position);
                         explosionField.explode(view);
+                        Main2Activity.quitAlarm(notes.getSenderId());
                     }
                 });
                 dialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -201,13 +202,13 @@ public class MainActivity extends AppCompatActivity {
                                 String cate = editText.getText().toString();
                                 MenuItem menuItem1 = navView.getMenu().add(R.id.group1, Menu.NONE,Menu.NONE,cate);
                                 menuItem1.setCheckable(true);
+                                menuItem1.setChecked(true);
                                 navView.setCheckedItem(menuItem1.getItemId());
                             }
                         });
                         dialog.setNegativeButton("取消", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-
                             }
                         });
                         dialog.show();

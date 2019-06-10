@@ -42,7 +42,7 @@ public class AlarmActivity extends Activity {
         final TimePicker timePicker = findViewById(R.id.timePicker);
         timePicker.setIs24HourView(true);
         final DatePicker datePicker = findViewById(R.id.datePicker);
-        ((ViewGroup)((ViewGroup) datePicker.getChildAt(0)).getChildAt(0)).getChildAt(0).setVisibility(View.GONE);
+        ((ViewGroup)((ViewGroup) datePicker.getChildAt(0)).getChildAt(0)).getChildAt(2).setVisibility(View.GONE);
 
 
         category = getIntent().getStringExtra("category");
