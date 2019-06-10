@@ -10,11 +10,15 @@ public class Notes extends LitePalSupport implements Serializable {
 
     private long id;
 
+    private String category;
+
+    private int senderId;
+
+    private String content;
+
     private String title;
 
     private String preview;
-
-    private String content;
 
     private Date createTime;
 
@@ -22,7 +26,6 @@ public class Notes extends LitePalSupport implements Serializable {
 
     private Boolean delete_flag;
 
-    private String category;
 
     private int titleImg;
 
@@ -30,7 +33,7 @@ public class Notes extends LitePalSupport implements Serializable {
 
     private Boolean alarm;
 
-    private int senderId;
+
 
     public int getSenderId() {
         return senderId;

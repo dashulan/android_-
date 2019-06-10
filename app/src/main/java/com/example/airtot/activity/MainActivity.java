@@ -4,6 +4,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -11,6 +12,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -40,6 +42,9 @@ import java.util.Set;
 import tyrantgit.explosionfield.ExplosionField;
 
 public class MainActivity extends AppCompatActivity {
+
+    public static final int CREATENEWNOTES =1;
+    public static final int UPATEOLDNOTES =2;
 
     private TimeReceiver timeReceiver;
 
@@ -284,6 +289,22 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        switch (requestCode) {
+            case CREATENEWNOTES:
+                if (resultCode == RESULT_OK) {
+                    Notes notes = (Notes) data.getSerializableExtra("newNotes");
+                    homeAdapter.addData(notes);
+                }
+                break;
+            case UPATEOLDNOTES:
+                if (requestCode == RESULT_OK) {
 
-
+                }
+                break;
+            default:
+                break;
+        }
+    }
 }

@@ -29,20 +29,26 @@ public class Main2Activity extends AppCompatActivity {
 
     private Button btn;
     private EditText editText;
-    private Boolean btnclicked = false;
+
     private Integer[] imgs = new Integer[]{R.drawable.p0, R.drawable.p1, R.drawable.p2, R.drawable.p3, R.drawable.p4, R.drawable.p5,
             R.drawable.p6, R.drawable.p7, R.drawable.p8, R.drawable.p9, R.drawable.p10, R.drawable.p11, R.drawable.p12, R.drawable.p13, R.drawable.p14};
+
     private Date alarmDate=null;
     private Boolean isalarm =false;
     private PendingIntent pendingIntent=null;
-    private Notes needUpdateNotes = null;
     private String category;
-    private int senderId;
+
+    private int senderId =0;
+    private Notes oldNotes = null;
+    private Notes newNotes;
+    private Boolean newOne = true;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main2);
+
         Toolbar toolbar = findViewById(R.id.toolbar);
         toolbar.setTitle("备忘录");
         setSupportActionBar(toolbar);
@@ -52,43 +58,42 @@ public class Main2Activity extends AppCompatActivity {
         btn = findViewById(R.id.save);
         editText = findViewById(R.id.editText);
 
-
         category = getIntent().getStringExtra("category");
 
 
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (needUpdateNotes != null) {
-                    needUpdateNotes.setContent(editText.getText().toString());
-                    needUpdateNotes.update(needUpdateNotes.getId());
+                if (oldNotes != null) {
+                    oldNotes.setContent(editText.getText().toString());
+                    oldNotes.update(oldNotes.getId());
                     MainActivity.homeAdapter.notifyDataSetChanged();
                     return;
                 }
-                btnclicked=true;
-                Notes notes = new Notes();
                 String content = editText.getText().toString();
-                notes.setContent(content);
+                newNotes.setContent(content);
                 if (content.length() > 5) {
-                    notes.setTitle(content.substring(0, 5));
+                    newNotes.setTitle(content.substring(0, 5));
                     if (content.length() > 10) {
-                        notes.setPreview(content.substring(5,10));
+                        newNotes.setPreview(content.substring(5,10));
                     }else {
-                        notes.setPreview(content.substring(5));
+                        newNotes.setPreview(content.substring(5));
                     }
                 } else {
-                    notes.setTitle(content);
+                    newNotes.setTitle(content);
                 }
-                notes.setCreateTime(new Date(System.currentTimeMillis()));
-                notes.setCategory(category);
+
+                newNotes.setCreateTime(new Date(System.currentTimeMillis()));
+                newNotes.setCategory(category);
+
                 Random random = new Random();
                 int rid= random.nextInt(14);
-                notes.setTitleImg(imgs[rid]);
-                notes.setAlarm(isalarm);
-                notes.setAlarmTime(alarmDate);
-                notes.setSenderId(senderId);
-                notes.save();
-                MainActivity.items.add(notes);
+                newNotes.setTitleImg(imgs[rid]);
+                newNotes.setAlarm(isalarm);
+                newNotes.setAlarmTime(alarmDate);
+                newNotes.setSenderId(senderId);
+                newNotes.save();
+                MainActivity.items.add(newNotes);
                 MainActivity.homeAdapter.notifyDataSetChanged();
             }
         });
@@ -120,7 +125,6 @@ public class Main2Activity extends AppCompatActivity {
                 break;
             case R.id.changeCategor:
                 category = "生活";
-
                 break;
         }
 
@@ -144,7 +148,10 @@ public class Main2Activity extends AppCompatActivity {
     @Override
     public void finish() {
         if (editText.getText().toString().length() >0) {
-            btn.callOnClick();
+            saveNotes();
+            Intent intent = new Intent();
+            intent.putExtra("newNotes", newNotes);
+            setResult(RESULT_OK,intent);
         }
         Log.e(Main2Activity.class.toString(), "活动退出");
         super.finish();
@@ -153,13 +160,46 @@ public class Main2Activity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        needUpdateNotes =(Notes)getIntent().getSerializableExtra("notes");
-        if (needUpdateNotes != null) {
-            category = needUpdateNotes.getCategory();
-            senderId = needUpdateNotes.getSenderId();
-            editText.setText(needUpdateNotes.getContent());
+        oldNotes =(Notes)getIntent().getSerializableExtra("notes");
+        if (oldNotes != null) {
+            category = oldNotes.getCategory();
+            senderId = oldNotes.getSenderId();
+            editText.setText(oldNotes.getContent());
         }
     }
+
+
+    public void saveNotes() {
+        newNotes = new Notes();
+
+        String content = editText.getText().toString();
+        newNotes.setContent(content);
+        if (content.length() > 5) {
+            newNotes.setTitle(content.substring(0, 5));
+            if (content.length() > 10) {
+                newNotes.setPreview(content.substring(5,10));
+            }else {
+                newNotes.setPreview(content.substring(5));
+            }
+        } else {
+            newNotes.setTitle(content);
+        }
+
+        newNotes.setCreateTime(new Date(System.currentTimeMillis()));
+        newNotes.setCategory(category);
+
+        Random random = new Random();
+        int rid= random.nextInt(14);
+        newNotes.setTitleImg(imgs[rid]);
+        newNotes.setAlarm(isalarm);
+        newNotes.setAlarmTime(alarmDate);
+
+        newNotes.setSenderId(senderId);
+        newNotes.save();
+    }
+
+
+
 
     public static void quitAlarm(int senderId) {
         AlarmManager alarmManager = (AlarmManager) MyApplication.getContext().getSystemService(Context.ALARM_SERVICE);
