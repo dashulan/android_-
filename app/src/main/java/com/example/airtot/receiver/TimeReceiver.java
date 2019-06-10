@@ -1,4 +1,4 @@
-package com.example.airtot;
+package com.example.airtot.receiver;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.view.View;
 import android.widget.Toast;
 
+import com.example.airtot.MyApplication;
 import com.example.airtot.activity.AlarmActivity;
 import com.example.airtot.activity.MainActivity;
 

@@ -5,6 +5,7 @@ import android.app.PendingIntent;
 import android.content.Intent;
 import android.os.Bundle;
 
+import com.example.airtot.MyApplication;
 import com.example.airtot.dao.entity.Notes;
 
 import androidx.annotation.Nullable;
@@ -35,6 +36,7 @@ public class Main2Activity extends AppCompatActivity {
     private PendingIntent pendingIntent=null;
     private Notes needUpdateNotes = null;
     private String category;
+    private int senderId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,6 +93,7 @@ public class Main2Activity extends AppCompatActivity {
                 notes.setTitleImg(imgs[rid]);
                 notes.setAlarm(isalarm);
                 notes.setAlarmTime(alarmDate);
+                notes.setSenderId(senderId);
                 notes.save();
                 MainActivity.items.add(notes);
                 MainActivity.homeAdapter.notifyDataSetChanged();
@@ -117,7 +120,10 @@ public class Main2Activity extends AppCompatActivity {
                 startActivityForResult(intent,1);
                 break;
             case R.id.quitAlarm:
-                AlarmActivity.alarmManager.cancel(pendingIntent);
+                Intent senderInent = new Intent();
+                senderInent.setAction("com.example.airtot.timer");
+                PendingIntent newPedingIntnet = PendingIntent.getBroadcast(MyApplication.getContext(), senderId, senderInent, 0);
+                AlarmActivity.alarmManager.cancel(newPedingIntnet);
                 break;
             case android.R.id.home:
                 finish();
@@ -135,6 +141,7 @@ public class Main2Activity extends AppCompatActivity {
                     isalarm = data.getBooleanExtra("isAlarm", false);
                     alarmDate = new Date(data.getLongExtra("alarmDate", System.currentTimeMillis()));
                     pendingIntent = data.getParcelableExtra("sender");
+                    senderId = data.getIntExtra("senderid",0);
                 }
 
         }
@@ -155,6 +162,7 @@ public class Main2Activity extends AppCompatActivity {
         needUpdateNotes =(Notes)getIntent().getSerializableExtra("notes");
         if (needUpdateNotes != null) {
             category = needUpdateNotes.getCategory();
+            senderId = needUpdateNotes.getSenderId();
             editText.setText(needUpdateNotes.getContent());
         }
     }

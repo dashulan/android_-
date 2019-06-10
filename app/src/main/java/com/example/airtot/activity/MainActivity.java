@@ -4,22 +4,11 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
-import android.provider.ContactsContract;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.util.Log;
-import android.view.DragEvent;
-import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.accessibility.AccessibilityManager;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -34,14 +23,9 @@ import com.bumptech.glide.Glide;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.example.airtot.MyApplication;
 import com.example.airtot.R;
-import com.example.airtot.TimeReceiver;
-import com.example.airtot.adapter.FoldingCellListAdapter;
-import com.example.airtot.adapter.FruitAdapter;
-import com.example.airtot.adapter.HomeAdapter;
+import com.example.airtot.receiver.TimeReceiver;
 import com.example.airtot.adapter.NotesAdapter;
 import com.example.airtot.dao.entity.Notes;
-import com.example.airtot.entity.Fruit;
-import com.example.airtot.entity.Item;
 import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.ramotion.foldingcell.FoldingCell;
@@ -80,7 +64,6 @@ public class MainActivity extends AppCompatActivity {
         fab = findViewById(R.id.fab);
         navView = findViewById(R.id.nav);
 
-
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction("com.example.airtot.timer");
         timeReceiver = new TimeReceiver();
@@ -92,6 +75,7 @@ public class MainActivity extends AppCompatActivity {
 
         imageView = view.findViewById(R.id.headImg);
         Glide.with(this).load(R.drawable.p6).into(imageView);
+
         mDrawerLayout.addDrawerListener(new DrawerLayout.DrawerListener() {
             @Override
             public void onDrawerSlide(@NonNull View drawerView, float slideOffset) {
@@ -266,7 +250,6 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             }
         });
-
     }
 
 
@@ -286,8 +269,6 @@ public class MainActivity extends AppCompatActivity {
         }
         return true;
     }
-
-
 
 
     @Override

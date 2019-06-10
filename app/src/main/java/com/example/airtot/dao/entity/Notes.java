@@ -30,6 +30,16 @@ public class Notes extends LitePalSupport implements Serializable {
 
     private Boolean alarm;
 
+    private int senderId;
+
+    public int getSenderId() {
+        return senderId;
+    }
+
+    public void setSenderId(int senderId) {
+        this.senderId = senderId;
+    }
+
     public long getId() {
         return id;
     }

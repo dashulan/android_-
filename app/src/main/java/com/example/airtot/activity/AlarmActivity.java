@@ -98,6 +98,7 @@ public class AlarmActivity extends Activity {
                 intent.putExtra("isAlarm", isSetting);
                 intent.putExtra("alarmDate",alarmTime.getTime());
                 intent.putExtra("sender", sender);
+                intent.putExtra("senderid",r1);
                 setResult(RESULT_OK,intent);
                 finish();
             }
