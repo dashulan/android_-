@@ -44,10 +44,14 @@ public class Main2Activity extends AppCompatActivity {
     private Boolean newOne = true;
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.e(Main2Activity.class.toString(), "活动开始");
+
         setContentView(R.layout.activity_main2);
+
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         toolbar.setTitle("备忘录");
@@ -57,6 +61,12 @@ public class Main2Activity extends AppCompatActivity {
 
         btn = findViewById(R.id.save);
         editText = findViewById(R.id.editText);
+
+        newOne = getIntent().getBooleanExtra("newOne", true);
+        if (!newOne) {
+            oldNotes = (Notes) getIntent().getSerializableExtra("oldNotes");
+            editText.setText(oldNotes.getContent());
+        }
 
         category = getIntent().getStringExtra("category");
 
@@ -147,11 +157,19 @@ public class Main2Activity extends AppCompatActivity {
 
     @Override
     public void finish() {
-        if (editText.getText().toString().length() >0) {
-            saveNotes();
+        if (newOne) {
+            if (editText.getText().toString().length() > 0) {
+                saveNotes();
+                Intent intent = new Intent();
+                intent.putExtra("newNotes", newNotes);
+                setResult(RESULT_OK, intent);
+            }
+        } else {
+            oldNotes.setContent(editText.getText().toString());
+            oldNotes.update(oldNotes.getId());
             Intent intent = new Intent();
-            intent.putExtra("newNotes", newNotes);
-            setResult(RESULT_OK,intent);
+            intent.putExtra("oldNotes", oldNotes);
+            setResult(RESULT_OK, intent);
         }
         Log.e(Main2Activity.class.toString(), "活动退出");
         super.finish();
@@ -160,12 +178,12 @@ public class Main2Activity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        oldNotes =(Notes)getIntent().getSerializableExtra("notes");
-        if (oldNotes != null) {
-            category = oldNotes.getCategory();
-            senderId = oldNotes.getSenderId();
-            editText.setText(oldNotes.getContent());
-        }
+//        oldNotes =(Notes)getIntent().getSerializableExtra("notes");
+//        if (oldNotes != null) {
+//            category = oldNotes.getCategory();
+//            senderId = oldNotes.getSenderId();
+//            editText.setText(oldNotes.getContent());
+//        }
     }
 
 

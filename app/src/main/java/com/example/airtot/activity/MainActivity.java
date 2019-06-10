@@ -140,8 +140,9 @@ public class MainActivity extends AppCompatActivity {
                     case R.id.updateBtn:
                         Intent intent = new Intent(MainActivity.this,Main2Activity.class);
                         Notes notes = (Notes) adapter.getData().get(position);
-                        intent.putExtra("notes", notes);
-                        startActivity(intent);
+                        intent.putExtra("oldNotes", notes);
+                        intent.putExtra("newOne", false);
+                        startActivityForResult(intent, UPATEOLDNOTES);
                         break;
                 }
             }
@@ -185,8 +186,9 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, Main2Activity.class);
+                intent.putExtra("newOne", true);
                 intent.putExtra("category", category);
-                startActivity(intent);
+                startActivityForResult(intent, CREATENEWNOTES);
             }
         });
 
@@ -263,11 +265,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    private List<Notes> getNotesListByCategory(String category) {
-        List<Notes> notesList = LitePal.where("category=?", category).find(Notes.class);
-        return notesList;
-    }
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -288,7 +285,6 @@ public class MainActivity extends AppCompatActivity {
         homeAdapter.notifyDataSetChanged();
     }
 
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         switch (requestCode) {
@@ -300,11 +296,18 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case UPATEOLDNOTES:
                 if (requestCode == RESULT_OK) {
-
+                    Notes notes = (Notes) data.getSerializableExtra("oldNotes");
+                    homeAdapter.notifyDataSetChanged();
                 }
                 break;
             default:
                 break;
         }
+    }
+
+
+    private List<Notes> getNotesListByCategory(String category) {
+        List<Notes> notesList = LitePal.where("category=?", category).find(Notes.class);
+        return notesList;
     }
 }
