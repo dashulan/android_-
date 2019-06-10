@@ -42,7 +42,8 @@ public class AlarmActivity extends Activity {
         final TimePicker timePicker = findViewById(R.id.timePicker);
         timePicker.setIs24HourView(true);
         final DatePicker datePicker = findViewById(R.id.datePicker);
-        ((ViewGroup)((ViewGroup) datePicker.getChildAt(0)).getChildAt(0)).getChildAt(2).setVisibility(View.GONE);
+
+        ((ViewGroup)((ViewGroup) datePicker.getChildAt(0)).getChildAt(0)).getChildAt(0).setVisibility(View.GONE);
 
 
         category = getIntent().getStringExtra("category");
@@ -51,7 +52,7 @@ public class AlarmActivity extends Activity {
         final Calendar now = Calendar.getInstance();
         quitBtn = findViewById(R.id.quit);
         saveBtn = findViewById(R.id.save);
-//        calcleBtn = findViewById(R.id.cancleAlarm);
+
          alarmManager = (AlarmManager) this.getSystemService(Context.ALARM_SERVICE);
 
         quitBtn.setOnClickListener(new View.OnClickListener() {
@@ -67,7 +68,6 @@ public class AlarmActivity extends Activity {
         });
 
 
-        Random random = new Random(47);
 
         saveBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -92,7 +92,6 @@ public class AlarmActivity extends Activity {
 
                 PendingIntent sender = PendingIntent.getBroadcast(MyApplication.getContext(), r1, myIntent,0);
                 alarmManager.set(AlarmManager.RTC_WAKEUP, alarmTime.getTime(), sender);
-//                calcleBtn.setVisibility(View.VISIBLE);
                 isSetting =true;
                 Intent intent = new Intent();
                 intent.putExtra("isAlarm", isSetting);
@@ -104,12 +103,6 @@ public class AlarmActivity extends Activity {
             }
         });
 
-//        calcleBtn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                isSetting=false;
-//            }
-//        });
     }
 
 }

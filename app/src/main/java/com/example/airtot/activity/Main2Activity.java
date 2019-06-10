@@ -2,6 +2,7 @@ package com.example.airtot.activity;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -43,8 +44,8 @@ public class Main2Activity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main2);
         Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
         toolbar.setTitle("备忘录");
+        setSupportActionBar(toolbar);
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
@@ -54,14 +55,6 @@ public class Main2Activity extends AppCompatActivity {
 
         category = getIntent().getStringExtra("category");
 
-//        FloatingActionButton fab = findViewById(R.id.fab);
-//        fab.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                        .setAction("Action", null).show();
-//            }
-//        });
 
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -120,14 +113,14 @@ public class Main2Activity extends AppCompatActivity {
                 startActivityForResult(intent,1);
                 break;
             case R.id.quitAlarm:
-//                Intent senderInent = new Intent();
-//                senderInent.setAction("com.example.airtot.timer");
-//                PendingIntent newPedingIntnet = PendingIntent.getBroadcast(MyApplication.getContext(), senderId, senderInent, 0);
-//                AlarmActivity.alarmManager.cancel(newPedingIntnet);
                 quitAlarm(senderId);
                 break;
             case android.R.id.home:
                 finish();
+                break;
+            case R.id.changeCategor:
+                category = "生活";
+
                 break;
         }
 
@@ -169,10 +162,12 @@ public class Main2Activity extends AppCompatActivity {
     }
 
     public static void quitAlarm(int senderId) {
+        AlarmManager alarmManager = (AlarmManager) MyApplication.getContext().getSystemService(Context.ALARM_SERVICE);
         Intent senderInent = new Intent();
         senderInent.setAction("com.example.airtot.timer");
         PendingIntent newPedingIntnet = PendingIntent.getBroadcast(MyApplication.getContext(), senderId, senderInent, 0);
-        AlarmActivity.alarmManager.cancel(newPedingIntnet);
+        alarmManager.cancel(newPedingIntnet);
+
     }
 
 }

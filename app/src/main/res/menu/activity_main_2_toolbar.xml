@@ -13,4 +13,8 @@
         app:showAsAction="never"
         />
 
+    <item android:id="@+id/changeCategor"
+        android:title="修改分组"
+        app:showAsAction="never"/>
+
 </menu>

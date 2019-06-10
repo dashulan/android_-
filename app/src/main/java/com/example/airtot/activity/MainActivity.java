@@ -70,6 +70,7 @@ public class MainActivity extends AppCompatActivity {
         registerReceiver(timeReceiver, intentFilter);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
+        toolbar.setTitle("AirToT");
         mDrawerLayout = findViewById(R.id.drawLayout);
         View view = navView.inflateHeaderView(R.layout.nav_header);
 
@@ -225,8 +226,11 @@ public class MainActivity extends AppCompatActivity {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 navView.getMenu().removeItem(navView.getCheckedItem().getItemId());
-                                LitePal.deleteAll(Notes.class, "category=?", categoryRemove);
-
+                                List<Notes> notesList = LitePal.where("category=?", categoryRemove).find(Notes.class);
+                                for (Notes notes : notesList) {
+                                    Main2Activity.quitAlarm(notes.getSenderId());
+                                    notes.delete();
+                                }
                                 homeAdapter.notifyDataSetChanged();
                             }
                         });
